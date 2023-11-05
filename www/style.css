@@ -1,0 +1,15 @@
+body {
+    background: linear-gradient(45deg, #C1FFC1, #8965CD);
+    background-attachment: fixed;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 50px;
+    font-family: Arial;
+    color: white;
+}
+
+.well {
+    background-color: #FFFFFF88;
+}
