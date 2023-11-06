@@ -6,79 +6,80 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       fileInput(
-        "file", "Upload Spectramax file"
+        "file", NULL, buttonLabel = "Upload", placeholder = "spectramax.txt"
       ),
       radioButtons(
-        "replicate_orientation", "Replicate orientation",
+        "replicate_orientation", "Replicate Orientation",
         c("Horizonal" = "h", "Vertical" = "v"),
         selected = "h"
       ),
       textAreaInput(
-        "sample_names", "Sample names",
+        "sample_names", "Sample Names",
         value = NULL,
         placeholder = "Sample_1; Sample_2; Sample_3...",
         resize = "vertical"
       ),
-      checkboxInput(
-        "remove_empty",
-        "Remove empty wells from analysis",
-        TRUE
-      ),
       checkboxGroupInput(
         "ignore_outliers",
-        "Remove outliers from:",
+        "Remove Outliers From:",
         choices = c("Samples" = "samples", "Standards" = "standards"),
         selected = c("samples", "standards")
       ),
+      numericInput(
+        "target_conc", "Target Conc.",
+        NULL
+      ),
+      numericInput(
+        "target_vol", "Target Vol. (uL)",
+        15
+      ),
       textAreaInput(
         "standard_scale",
-        "Known concentrations of standards, in the order they appear",
+        "Standard Scale",
         value = "0, 0.125, 0.25, 0.5, 1, 2, 4",
         resize = "vertical"
       ),
       numericInput(
-        "n_replicates", "Number of technical replicates",
+        "n_replicates", "# Replicates",
         3,
         min = 0, max = NA
       ),
+      checkboxInput(
+        "remove_empty",
+        "Remove Empty Wells",
+        TRUE
+      ),
       numericInput(
-        "wavelength", "Wavelength (nm) of absorbance captured",
+        "wavelength", "λ",
         562,
         min = 0, max = 1000
-      ),
-      numericInput(
-        "target_conc", "Target concentration (before sample buffer)",
-        NULL
-      ),
-      numericInput(
-        "target_vol", "Target volume (uL) (before sample buffer)",
-        15
       ),
       width = 2),
     mainPanel(
       tabsetPanel(
         type = "pills",
         tabPanel(
-          "Plate Plot",
-          plotOutput("plate_plot", width = "900px", height = "600px")
-        ),
-        tabPanel(
-          "Standards Plot",
-          plotOutput("standards_plot", width = "700px", height = "600px")
+          "Plots",
+          fluidRow(
+            splitLayout(
+              cellWidths = c("50%", "50%"),
+              plotOutput("plate_plot", width = "100%"),
+              plotOutput("standards_plot", width = "100%")
+            )
+          ),
+          fluidRow(
+            column(width = 12, tableOutput("dilution_table"))
+          )
         ),
         tabPanel(
           "Samples Table",
           tableOutput("samples_table")
         ),
         tabPanel(
-          "Dilution Table",
-          tableOutput("dilution_table")
-        ),
-        tabPanel(
           "All Samples Table",
           tableOutput("samples_table_all")
         ),
-      )
-    )
+      ),
+    width = 10)
   )
 )

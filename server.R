@@ -1,4 +1,6 @@
 library(ggplot2)
+library(dplyr)
+library(bladdr)
 library(qp)
 server <- function(input, output, session) {
 
@@ -61,21 +63,20 @@ server <- function(input, output, session) {
     qp_plot_standards(conditional_rm()) +
       theme_minimal() +
       theme(
-        legend.position = "top",
         text = element_text(size = 15)
       ) +
       labs(color = "Sample Type", shape = "Outlier")
-  })
+  }, bg = "#FFFFFF44")
 
   output$plate_plot <- renderPlot({
-    qp_plot_plate(data(), size = 30) +
+    qp_plot_plate(data(), size = 15) +
       theme_void() +
       theme(
         legend.position = "none",
         plot.margin = unit(c(2, 2, 2, 2), "lines")
       ) +
       coord_cartesian(clip = "off")
-  }, bg = "#FFFFFFCC")
+  }, bg = "#FFFFFF44")
 
   output$samples_table <- renderTable({
     qp_summarize(conditional_rm()$qp)
@@ -90,14 +91,21 @@ server <- function(input, output, session) {
         target_conc = NULL,
         input$target_vol,
         remove_standards = TRUE
-      )
+      ) |>
+        select(Name = .sample_name,
+               `Mean Conc` = .mean_pred_conc,
+               `Sample to Add` = sample_to_add,
+               `Add to` = add_to)
     } else {
       qp_dilute(
         qp_summarize(conditional_rm()$qp),
         input$target_conc, input$target_vol,
         remove_standards = TRUE
-      )
-
+      ) |>
+        select(Name = .sample_name,
+               `Mean Conc` = .mean_pred_conc,
+               `Sample to Add` = sample_to_add,
+               `Add to` = add_to)
     }
   })
 }

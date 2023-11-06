@@ -1,46 +1,66 @@
 body {
-    background: linear-gradient(45deg, #C1FFC1, #8965CD);
+    background: linear-gradient(45deg, #8965CD, #C1FFC1);
     background-attachment: fixed;
+    color: white;
+    font-family: Arial;
+    font-weight: bold;
 }
 
 h2 {
     font-weight: bold;
     font-size: 50px;
-    font-family: Arial;
-    color: white;
 }
 
 .well {
-    background-color: #FFFFFF88;
+    background-color: #FFFFFF22;
+    font-size: 25px;
+    border: 1px solid transparent;
+}
+
+.shiny-options-group, .checkbox {
+    font-size: 17px;
+}
+
+input[type='checkbox'], input[type='radio'] {
+    transform: scale(2);
+}
+
+.checkbox > label, .checkbox > label > span, .radio > label, .radio > label > span {
+    margin: 10px;
+    font-weight: bold;
+}
+
+.form-control {
+    color: white;
+    font-weight: bold;
+}
+
+.form-control::placeholder {
+    color: #FFFFFFAA
 }
 
 .nav.nav-pills > li > a {
     color: white;
+    transition-property: background-color;
+    transition-duration: 0.2s;
 }
 
 .nav.nav-pills > li.active > a {
-    background-color: #FFFFFF88;
+    background-color: #FFFFFF44;
     color: black;
     font-weight: bold;
 }
 
 .nav.nav-pills > li > a:hover {
     color: black;
+    background-color: #FFFFFF44;
 }
 
 input {
     accent-color: #8965CD;
 }
 
-textarea.form-control, input.form-control {
-    color: #000000;
-    background-color: transparent;
-    border: 1px solid transparent;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5);
-}
-
-input.form-control[readonly] {
-    color: #000000;
+input.form-control[readonly], input.form-control, textarea.form-control {
     background-color: transparent;
     border: 1px solid transparent;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5);
@@ -49,13 +69,26 @@ input.form-control[readonly] {
 .btn-default {
     background-color: #735D98;
     color: white;
+    border-color: transparent;
+    font-weight: bold;
+    transition-property: background-color;
+    transition-duration: 0.2s;
 }
 
 .btn-default:hover {
     background-color: #4C3E65;
     color: white;
+    border-color: transparent;
 }
 
 .progress-bar {
     background-color: #735D98;
+}
+
+#plate_plot {
+    max-width: 600px;
+}
+
+#standards_plot {
+    max-width: 500px;
 }
