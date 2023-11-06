@@ -31,16 +31,40 @@ server <- function(input, output, session) {
     qp_add_std_conc(outliers(), parsed_standards)
   })
 
+  with_names <- reactive({
+    if (!isTruthy(input$sample_names)) {
+      qp_add_names(std_conc())
+    } else {
+      split_samples <- strsplit(input$sample_names, ",")[[1]]
+      parsed_samples <- stringr::str_squish(split_samples)
+      qp_add_names(std_conc(), parsed_samples)
+    }
+  })
+
   fit <- reactive({
-    qp_fit(std_conc())
+    qp_fit(with_names())
   })
 
   calc_conc <- reactive({
     qp_calc_conc(fit())
   })
 
+  conditional_rm <- reactive({
+    if (input$remove_empty) {
+      qp_remove_empty(calc_conc())
+    } else {
+      calc_conc()
+    }
+  })
+
   output$standards_plot <- renderPlot({
-    qp_plot_standards(calc_conc())
+    qp_plot_standards(conditional_rm()) +
+      theme_minimal() +
+      theme(
+        legend.position = "top",
+        text = element_text(size = 15)
+      ) +
+      labs(color = "Sample Type", shape = "Outlier")
   })
 
   output$plate_plot <- renderPlot({
@@ -51,5 +75,29 @@ server <- function(input, output, session) {
         plot.margin = unit(c(2, 2, 2, 2), "lines")
       ) +
       coord_cartesian(clip = "off")
+  }, bg = "#FFFFFFCC")
+
+  output$samples_table <- renderTable({
+    qp_summarize(conditional_rm()$qp)
+  })
+  output$samples_table_all <- renderTable({
+    conditional_rm()$qp
+  })
+  output$dilution_table <- renderTable({
+    if (!isTruthy(input$target_conc)) {
+      qp_dilute(
+        qp_summarize(conditional_rm()$qp),
+        target_conc = NULL,
+        input$target_vol,
+        remove_standards = TRUE
+      )
+    } else {
+      qp_dilute(
+        qp_summarize(conditional_rm()$qp),
+        input$target_conc, input$target_vol,
+        remove_standards = TRUE
+      )
+
+    }
   })
 }

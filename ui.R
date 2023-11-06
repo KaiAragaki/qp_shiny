@@ -15,7 +15,9 @@ ui <- fluidPage(
       ),
       textAreaInput(
         "sample_names", "Sample names",
-        value = "Sample_1; Sample_2; Sample_3..."
+        value = NULL,
+        placeholder = "Sample_1; Sample_2; Sample_3...",
+        resize = "vertical"
       ),
       checkboxInput(
         "remove_empty",
@@ -25,13 +27,14 @@ ui <- fluidPage(
       checkboxGroupInput(
         "ignore_outliers",
         "Remove outliers from:",
-        c("Samples" = "samples", "Standards" = "standards"),
-        c(TRUE, TRUE)
+        choices = c("Samples" = "samples", "Standards" = "standards"),
+        selected = c("samples", "standards")
       ),
       textAreaInput(
         "standard_scale",
         "Known concentrations of standards, in the order they appear",
-        value = "0, 0.125, 0.25, 0.5, 1, 2, 4"
+        value = "0, 0.125, 0.25, 0.5, 1, 2, 4",
+        resize = "vertical"
       ),
       numericInput(
         "n_replicates", "Number of technical replicates",
@@ -43,10 +46,39 @@ ui <- fluidPage(
         562,
         min = 0, max = 1000
       ),
+      numericInput(
+        "target_conc", "Target concentration (before sample buffer)",
+        NULL
+      ),
+      numericInput(
+        "target_vol", "Target volume (uL) (before sample buffer)",
+        15
+      ),
       width = 2),
     mainPanel(
-      plotOutput("plate_plot", width = "900px", height = "600px"),
-      plotOutput("standards_plot", width = "900px", height = "600px"),
+      tabsetPanel(
+        type = "pills",
+        tabPanel(
+          "Plate Plot",
+          plotOutput("plate_plot", width = "900px", height = "600px")
+        ),
+        tabPanel(
+          "Standards Plot",
+          plotOutput("standards_plot", width = "700px", height = "600px")
+        ),
+        tabPanel(
+          "Samples Table",
+          tableOutput("samples_table")
+        ),
+        tabPanel(
+          "Dilution Table",
+          tableOutput("dilution_table")
+        ),
+        tabPanel(
+          "All Samples Table",
+          tableOutput("samples_table_all")
+        ),
+      )
     )
   )
 )
