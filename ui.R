@@ -16,7 +16,7 @@ ui <- fluidPage(
       textAreaInput(
         "sample_names", "Sample Names",
         value = NULL,
-        placeholder = "Sample_1; Sample_2; Sample_3...",
+        placeholder = "Sample_1, Sample_2, Sample_3...",
         resize = "vertical"
       ),
       checkboxGroupInput(
