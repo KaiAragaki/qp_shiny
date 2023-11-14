@@ -1,5 +1,6 @@
 library(ggplot2)
 library(dplyr)
+library(stringr)
 library(bladdr)
 library(qp)
 server <- function(input, output, session) {
@@ -93,7 +94,7 @@ server <- function(input, output, session) {
         remove_standards = TRUE
       ) |>
         select(Name = .sample_name,
-               `Mean Conc` = .mean_pred_conc,
+               `Mean Conc` = .pred_conc_mean,
                `Sample to Add` = sample_to_add,
                `Add to` = add_to)
     } else {
@@ -103,9 +104,36 @@ server <- function(input, output, session) {
         remove_standards = TRUE
       ) |>
         select(Name = .sample_name,
-               `Mean Conc` = .mean_pred_conc,
+               `Mean Conc` = .pred_conc_mean,
                `Sample to Add` = sample_to_add,
                `Add to` = add_to)
     }
   })
+
+  make_filename <- reactive({
+    str_replace(input$file$name, "\\..*$", "_report.html")
+  })
+
+  output$get_report <- downloadHandler(
+    filename = function() {
+      make_filename()
+    },
+    content = function(file) {
+      params <- list(
+        file = input$file,
+        sample_orientation = input$replicate_orientation,
+        sample_names = input$sample_names,
+        ignore_outliers = input$ignore_outliers,
+        target_vol = input$target_vol,
+        target_conc = input$target_conc,
+        standard_scale = input$standard_scale,
+        replicates = input$n_replicates,
+        remove_empty = input$remove_empty,
+        wavelength = input$wavelength
+      )
+      qp_report(conditional_rm() |>
+                  qp_dilute(input$target_conc, input$target_vol),
+                file, params)
+    }
+  )
 }

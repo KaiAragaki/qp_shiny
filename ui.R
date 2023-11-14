@@ -8,6 +8,7 @@ ui <- fluidPage(
       fileInput(
         "file", NULL, buttonLabel = "Upload", placeholder = "spectramax.txt"
       ),
+      downloadButton("get_report", "Download Report"),
       radioButtons(
         "replicate_orientation", "Replicate Orientation",
         c("Horizonal" = "h", "Vertical" = "v"),
@@ -80,6 +81,7 @@ ui <- fluidPage(
           tableOutput("samples_table_all")
         ),
       ),
-    width = 10)
+      width = 10
+    )
   )
 )
