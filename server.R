@@ -1,10 +1,4 @@
-library(ggplot2)
-library(dplyr)
-library(stringr)
-library(bladdr)
-library(qp)
 server <- function(input, output, session) {
-
   data <- reactive({
     req(input$file)
     qp_tidy(
@@ -131,9 +125,13 @@ server <- function(input, output, session) {
         remove_empty = input$remove_empty,
         wavelength = input$wavelength
       )
-      qp_report(conditional_rm() |>
-                  qp_dilute(input$target_conc, input$target_vol),
-                file, params)
+      render_report(
+        input = report_path, output = file,
+        params =  list(
+          qp = qp_dilute(conditional_rm(), input$target_conc, input$target_vol),
+          other = params
+        )
+      )
     }
   )
 }
