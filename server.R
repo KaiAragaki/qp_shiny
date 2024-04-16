@@ -94,7 +94,8 @@ server <- function(input, output, session) {
     } else {
       qp_dilute(
         qp_summarize(conditional_rm()$qp),
-        input$target_conc, input$target_vol,
+        input$target_conc,
+        input$target_vol,
         remove_standards = TRUE
       ) |>
         select(Name = .sample_name,
