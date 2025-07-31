@@ -8,6 +8,11 @@ ui <- fluidPage(
       fileInput(
         "file", NULL, buttonLabel = "Upload", placeholder = "spectramax.txt"
       ),
+      selectInput(
+        "file_type",
+        "File type:",
+        c(SpectraMax = "spectramax", Synergy2 = "synergy2")
+      ),
       downloadButton("get_report", "Download Report"),
       radioButtons(
         "replicate_orientation", "Replicate Orientation",

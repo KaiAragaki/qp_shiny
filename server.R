@@ -1,13 +1,25 @@
 server <- function(input, output, session) {
   data <- reactive({
-    req(input$file)
-    qp_tidy(
-      input$file$datapath,
-      replicate_orientation = input$replicate_orientation,
-      n_standards = length(strsplit(input$standard_scale, ",")[[1]]),
-      n_replicates = input$n_replicates,
-      wavelength = input$wavelength
-    )
+    req(input$file, input$file_type)
+
+    if (input$file_type == "spectramax") {
+      qp_tidy(
+        input$file$datapath,
+        replicate_orientation = input$replicate_orientation,
+        n_standards = length(strsplit(input$standard_scale, ",")[[1]]),
+        n_replicates = input$n_replicates,
+        wavelength = input$wavelength
+      )
+    } else if (input$file_type == "synergy2") {
+      x <- mop::read_synergy2(input$file$datapath)
+      qp_tidy(
+        x,
+        replicate_orientation = input$replicate_orientation,
+        n_standards = length(strsplit(input$standard_scale, ",")[[1]]),
+        n_replicates = input$n_replicates,
+        wavelength = input$wavelength
+      )
+    }
   })
 
   outliers <- reactive({

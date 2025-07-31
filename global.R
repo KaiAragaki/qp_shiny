@@ -6,6 +6,7 @@ library(dplyr)
 library(stringr)
 library(bladdr)
 library(qp)
+library(mop)
 report_path <- tempfile(fileext = ".Rmd")
 
 file.copy(
