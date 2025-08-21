@@ -5,6 +5,6 @@ account: kai-a
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10431218
-bundleId: 7926511
+bundleId: 10706293
 url: https://kai-a.shinyapps.io/qp_shiny/
 version: 1
